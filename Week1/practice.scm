@@ -4,7 +4,7 @@
 (define (even x)
   (= (remainder x 2) 0))
 
-;; Define a function that accepts three arguments
+;; Define a function that accepts 3 arguments
 ;; and returns the sum of the squares of the larger two:
 
 (define (square x) ( * x x))
@@ -21,8 +21,17 @@
    ((smaller y x z) (sum_squares x z))
    (else (sum_squares x y))))
      
+;; Define a function that accepts 3 arguments
+;; and checks if they are triangle sides.
+
+(define (is_triangle a b c)
+  (and
+   (< a (+ b c))
+   (< b (+ a c))
+   (< c (+ a b))))
+
 ;; Define a function that finds the
-;; sum of number in a given range [x,y]:
+;; sum of numbers in a given range [x,y]:
 
 (define (range_sum x y)
   (if (>= x y)
