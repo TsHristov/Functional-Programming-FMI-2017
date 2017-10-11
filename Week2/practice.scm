@@ -51,8 +51,8 @@
 
 (define (digits_sum_helper number sum)
   (if (< number 10)
-      number
-      (digits_sum (quotient number 10) (+ sum (remainder number 10)))))
+      (+ sum number)
+      (digits_sum_helper (quotient number 10) (+ sum (remainder number 10)))))
 
 
 
