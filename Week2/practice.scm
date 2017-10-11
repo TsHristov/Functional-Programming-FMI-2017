@@ -25,7 +25,7 @@
   (cond
    ((= x 0) y)
    ((= y 0) x)
-   (gcd (quotient x y) y)))
+   (else (gcd y (remainder x y)))))
 
 ;; Write a function that computes power n of x
 
