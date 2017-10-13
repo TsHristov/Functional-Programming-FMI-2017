@@ -54,6 +54,14 @@
       (+ sum number)
       (digits_sum_helper (quotient number 10) (+ sum (remainder number 10)))))
 
+;; Write a function that finds out if a number is prime.
 
+(define (prime? n) (prime n 2))
 
-
+(define (prime n x)
+  (cond
+   ((and (<= x (/ n 2)) (= (remainder n x) 0)) #f)
+   ((and (<= x (/ n 2)) (not (= (remainder n x) 0)))
+	 (prime n (+ x 1)))
+   (else #t)))
+	   
