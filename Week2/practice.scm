@@ -84,3 +84,16 @@
    ((= a b c 0) 0) ;; When a = b = c = 0
    ((= (descriminant a b c) 0) (one_real_root a b)) ;; When b^2 - 4ac = 0
    (else (two_real_or_complex_roots a b c)))) ;; When b^2 - 4ac < 0 or b^2 - 4ac > 0
+
+
+;; Write a function that gives the binary representation of a non-negative decimal number:
+
+(define (decimal-to-binary number)
+  (if (not (= number 0))
+      (cons (remainder number 2) (decimal-to-binary (quotient number 2)))
+      (cons (remainder number 2) '())))
+
+(define (binary number)
+  (if (< number 0)
+      "Negative number given!"
+      (reverse (decimal-to-binary number))))
