@@ -1,8 +1,9 @@
 ;; Reverse a list:
-(define (reverse-list l)
-  (reverse-a-list l (- (length l) 1)))
 
-(define (reverse-a-list l index)
-  (if (> index 0)
-      (cons (list-ref l index) (reverse-a-list l (- index 1)))
-      (cons (list-ref l index) '())))
+(define (reverse-list list-argument)
+  (define (reverse-a-list list-argument index)
+    (if (> index 0)
+	(cons (list-ref list-argument index) (reverse-a-list list-argument (- index 1)))
+        (cons (list-ref list-argument index) '())))
+  (reverse-a-list list-argument (- (length list-argument) 1)))
+

@@ -1,10 +1,11 @@
 ;; Find the number of elements in a list:
+
 (define (elements-count list-argument)
+  (define (count list-argument counter)
+    (if (null? list-argument)
+	counter
+	(count (cdr list-argument) (+ 1 counter))))
   (if (not (list? list-argument))
       "Not a list!"
-      (count-helper list-argument 0)))
+      (count list-argument 0)))
 
-(define (count-helper list-argument counter)
-  (if (null? list-argument)
-      counter
-      (count-helper (cdr list-argument) (+ 1 counter))))

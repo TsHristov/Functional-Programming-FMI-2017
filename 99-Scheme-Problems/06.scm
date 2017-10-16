@@ -1,6 +1,6 @@
-;; Find out whether a list is a palindrome
+;; Find out whether a list is a palindrome:
 
-(define (is-palindrome l)
-  (if (list? l)
-      (equal? l (reverse l))
+(define (palindrome? list-argument)
+  (if (list? list-argument)
+      (equal? list-argument (reverse list-argument))
       "Not a list!"))
