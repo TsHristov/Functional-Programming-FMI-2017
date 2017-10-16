@@ -2,7 +2,7 @@
 ;; Recursive approach:
 
 (define (factorial_recursive n)
-  (if (= n 1)
+  (if (= n 0)
       1
       (* n (factorial_recursive (- n 1)))))
 
@@ -68,23 +68,19 @@
 
 ;; Write a function that solves a quadratic equation ax^2 + bx + c = 0:
 
-(define (descriminant a b c)
-  (- (* b b) (* 4 (* a c))))
-
-(define (one_real_root a b)
-  (/ (- b) (* 2 a)))
-
-(define (two_real_or_complex_roots a b c)
-  (cons
-   (/ (+ (- b) (sqrt (descriminant a b c))) (* 2 a))
-   (/ (- (- b) (sqrt (descriminant a b c))) (* 2 a))))
-
-(define (quadratic_solver a b c)
+(define (solve a b c)
   (cond
-   ((= a b c 0) 0) ;; When a = b = c = 0
-   ((= (descriminant a b c) 0) (one_real_root a b)) ;; When b^2 - 4ac = 0
-   (else (two_real_or_complex_roots a b c)))) ;; When b^2 - 4ac < 0 or b^2 - 4ac > 0
-
+   ((= a b c 0) "every x")
+   ((and (= a b 0) (not (= c 0))) "no roots")
+   ((and (= a 0) (not (= b c 0))) (/ (- c) b)))
+  (let ((descriminant (- (* b b) (* 4 a c))))
+    (cond
+     ((< d 0) "no roots")
+     ((= d 0) ( / (- b) (* 2 a)))
+     (else
+      (cons
+       (/ (- (- b) (sqrt descriminant)) (* 2 a))
+       (/ (+ (- b) (sqrt descriminant)) (* 2 a)))))))
 
 ;; Write a function that gives the binary representation of a non-negative decimal number:
 
@@ -94,6 +90,4 @@
       (cons (remainder number 2) '())))
 
 (define (binary number)
-  (if (< number 0)
-      "Negative number given!"
-      (reverse (decimal-to-binary number))))
+  (reverse (decimal-to-binary number)))
