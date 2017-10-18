@@ -9,3 +9,4 @@
   * `Find the number of elements in a list`: (04.scm)
   * `Reverse a list`: (05.scm)
   * `Find out whether a list is a palindrome`: (06.scm)
+  * `Flatten a nested list structure`: (07.scm)
