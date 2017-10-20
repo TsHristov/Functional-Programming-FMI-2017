@@ -3,10 +3,11 @@
 ;; '(a a a a b c c a a d e e e e) -> '(a b c d e)
 
 (define (compress* l)
-  (define (compress2* l res)
+  (define (compress** l res)
     (if (not (null? l))
-	(case (car l)
-	  ((res) (compress2* (cdr l) res))
-	  (else  (compress2* (cdr l) (append res (car l)))))
-	res))
-  (compress2* l '()))
+	(if (member (car l) res)
+	  (compress** (cdr l) res)
+	  (compress** (cdr l) (append res (list (car l)))))
+	(append res '())))
+  (compress** l '()))
+
