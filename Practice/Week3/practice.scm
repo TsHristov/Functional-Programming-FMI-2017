@@ -6,10 +6,16 @@
   (if (> a b)
       0
       (+ (term a)
-	 (generic-sum-interval term (next a) next b))))
+	 (generic-sum-in-interval term (next a) next b))))
 
-(define (member-calculation a) (/ 1 (* a (+ a 2))))
+(define (term a) (/ 1 (* a (+ a 2))))
 (define (next a) (+ a 4))
 
 (define (sequence-sum a b)
-  (generic-sum-interval term a next b))			       
+  (generic-sum-in-interval term a next b))			       
+
+;; Task 2:
+;; Write a function that computes the following sequence:
+;; (2 * 4 * 4 * 6 * 6 * 8...) / (3 * 3 * 5 * 5 * 7 * 7...)
+
+
