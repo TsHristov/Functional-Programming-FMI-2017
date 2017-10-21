@@ -10,3 +10,4 @@
   * `Reverse a list`: (05.scm)
   * `Find out whether a list is a palindrome`: (06.scm)
   * `Flatten a nested list structure`: (07.scm)
+  * `Eliminate consecutive duplicates of list elements`: (08.scm)
