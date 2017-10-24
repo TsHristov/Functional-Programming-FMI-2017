@@ -17,7 +17,13 @@
 ;; Task 2:
 
 ;; Task 3:
-(define (accumulate combiner null-value term a next b))
+;; Function that summarizes the previous two in Task 1 and Task 2:
+(define (accumulate combiner null-value term a next b)
+  (define (accumulator a b)
+    (if (> a b)
+	null-value
+	(combiner (term a)(accumulator (next a) b))))
+  (accumulator a b))
 
 ;; Task 4:
 
