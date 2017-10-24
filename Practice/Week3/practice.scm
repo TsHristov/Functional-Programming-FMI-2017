@@ -1,5 +1,5 @@
 ;; Task 1:
-;; Write a function that computes the following sequence:
+;; Function that computes the following sequence:
 ;; (1/(1 * 3)) + (1/(5 * 7)) + (1/(9 * 11)) + ...
 
 (define (generic-sum-in-interval term a next b)
@@ -15,7 +15,14 @@
   (generic-sum-in-interval term a next b))			       
 
 ;; Task 2:
-;; Write a function that computes the following sequence:
-;; (2 * 4 * 4 * 6 * 6 * 8...) / (3 * 3 * 5 * 5 * 7 * 7...)
 
+;; Task 3:
+(define (accumulate combiner null-value term a next b))
 
+;; Task 4:
+
+;; Task 5:
+;; Function that takes function f as an argument
+;; and returns the function with reversed arguments:
+(define (flip f)
+  (lambda (x y) (f y x)))
