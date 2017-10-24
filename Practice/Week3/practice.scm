@@ -26,6 +26,13 @@
   (accumulator a b))
 
 ;; Task 4:
+;; Function that filters the accumulated elements according to a predicate:
+(define (filter* combiner null-value term a next b predicate)
+  (define (filter** a b)
+    (if (> a b)
+	null-value
+	(combiner (predicate (term a)) (filter** (next a) b))))
+  (filter** a b))
 
 ;; Task 5:
 ;; Function that takes function f as an argument
