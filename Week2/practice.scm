@@ -15,12 +15,14 @@
   (accumulate 0 + 1 (lambda (x) (+ x 1)) (lambda (x) (> x 100)) (lambda (x) x)))
 
 ;; Function that checks if number is prime (via accumulate):
-(define (divisor? x number) (= (remainder number x) 0))
+(define (divisor? x number) (and (> x 0) (= (remainder number x) 0)))
 (define (prime? number)
-  (not (accumulate #t (lambda (x y) (and x y)) 2
-	       (lambda (x) (+ x 1))
-	       (lambda (x) (or (divisor? x number) (= x (ceiling (sqrt number)))))
-	       (lambda (x) (divisor? x number)))))
+  (define square-root (floor (sqrt number)))
+  (accumulate #t (lambda (x y) (and x y)) square-root
+	         (lambda (x) (- x 1))
+	         (lambda (x) (< x 2))
+	         (lambda (x) (not (divisor? x number)))))
+
 
 
 
