@@ -34,6 +34,16 @@
 	      (lambda (x) (> x b))
 	      (lambda (x) (if (prime? x) 1 0))))
 
+;; e: Calculates the value of e, using Brothers` formulae with 6 steps:
+(define (e)
+  (define up-to 6)
+  (define (term n) ( / (+ (* 2 n) 2) (factorial (+ (* 2 n) 1))))
+  (+ (accumulate 0 + 0 (lambda (x) (+ x 1))
+		       (lambda (x) (> x up-to))
+		       (lambda (x) (term x))) 0.0))
+
+
+
 
 
 
