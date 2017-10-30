@@ -8,11 +8,17 @@
 
 ;; factorial: Computes factorial (via accumulate):
 (define (factorial n)
-  (accumulate 1 * 1 (lambda (x) (+ x 1)) (lambda (x) (> x n)) (lambda (x) x))) 
+  (accumulate 1 * 1
+	      (lambda (x) (+ x 1))
+	      (lambda (x) (> x n))
+	      (lambda (x) x))) 
 
 ;; range-sum: Computes the sum of the numbers between 1 and 100 (via accumulate):
 (define (range-sum)
-  (accumulate 0 + 1 (lambda (x) (+ x 1)) (lambda (x) (> x 100)) (lambda (x) x)))
+  (accumulate 0 + 1
+	      (lambda (x) (+ x 1))
+	      (lambda (x) (> x 100))
+	      (lambda (x) x)))
 
 ;; prime?: Checks if number is prime (via accumulate):
 (define (divisor? x number) (and (> x 0) (= (remainder number x) 0)))
@@ -37,17 +43,18 @@
 (define (e)
   (define up-to 6)
   (define (term n) ( / (+ (* 2 n) 2) (factorial (+ (* 2 n) 1))))
-  (+ (accumulate 0 + 0 (lambda (x) (+ x 1))
-		       (lambda (x) (> x up-to))
-		       (lambda (x) (term x))) 0.0))
+  (+ (accumulate 0 + 0
+		 (lambda (x) (+ x 1))
+		 (lambda (x) (> x up-to))
+		 (lambda (x) (term x))) 0.0))
 
 ;; e^x: Calculates the value of e^x:
-(define (e^x x)
-  (define (term x n) (/ (expt x n) (factorial n)))
-  (accumulate 0 + (cons 0 1)
-	      (lambda (x) (cons (+ 1 (car x)) (term (cdr x) (car x))))
-	      (lambda (x) (> (car x) 1000000))
-	      (lambda (x) (cdr x))))
+;; (define (e^x x)
+;;   (define (term x n) (/ (expt x n) (factorial n)))
+;;   (accumulate 0 + (cons 0 1)
+;; 	      (lambda (x) (cons (+ 1 (car x)) (term (cdr x) (car x))))
+;; 	      (lambda (x) (> (car x) 1000000))
+;; 	      (lambda (x) (cdr x))))
 
 ;; divisors-sum: Calculates the sum of divisors of a given number:
 (define (divisors-sum n)
@@ -77,8 +84,3 @@
 	      (lambda (x) (if (even? x) (+ x 1) (+ x 2)))
 	      (lambda (x) (> x k))
 	      (lambda (x) (if (prime? (marsenne-prime x)) (list (perfect x)) '()))))
-
-
-
-
-
