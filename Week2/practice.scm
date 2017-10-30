@@ -15,9 +15,8 @@
   (accumulate 0 + 1 (lambda (x) (+ x 1)) (lambda (x) (> x 100)) (lambda (x) x)))
 
 ;; prime?: Checks if number is prime (via accumulate):
+(define (divisor? x number) (and (> x 0) (= (remainder number x) 0)))
 (define (prime? number)
-  (define (divisor? x number)
-    (and (> x 0) (= (remainder number x) 0)))
   (cond
    ((< number 2) #f)
    (else
@@ -42,8 +41,42 @@
 		       (lambda (x) (> x up-to))
 		       (lambda (x) (term x))) 0.0))
 
+;; e^x: Calculates the value of e^x:
+(define (e^x x)
+  (define (term x n) (/ (expt x n) (factorial n)))
+  (accumulate 0 + (cons 0 1)
+	      (lambda (x) (cons (+ 1 (car x)) (term (cdr x) (car x))))
+	      (lambda (x) (> (car x) 1000000))
+	      (lambda (x) (cdr x))))
 
+;; divisors-sum: Calculates the sum of divisors of a given number:
+(define (divisors-sum n)
+  (accumulate 0 + 1
+	      (lambda (x) (+ x 1))
+	      (lambda (x) (> x n))
+	      (lambda (x) (if (divisor? x n) x 0))))
 
+;; perfect-3: Finds the first three perfect numbers (trivial way):
+(define (perfect-3)
+  (define (aliquot-sum n) (- (divisors-sum n) n))
+  (define (ends-with-6-or-8? n)
+    (case (remainder n 10)
+      ((6 8) #t)
+      (else #f)))
+  (accumulate '() append 1
+	      (lambda (x) (+ x 1))
+	      (lambda (x) (> x 500))
+	      (lambda (x) (if (and (ends-with-6-or-8? x) (= x (aliquot-sum x))) (list x) '()))))
+
+;;perfect-numbers: Finds perfect numbers using coefficient k (using Euclid-Euler theorem):
+(define (perfect-numbers k)
+  (define (marsenne-prime p) (- (expt 2 p) 1))
+  (define (perfect p) (* (expt 2 (- p 1)) (marsenne-prime p)))
+  (define (even? x) (= (remainder x 2) 0))
+  (accumulate '() append 2
+	      (lambda (x) (if (even? x) (+ x 1) (+ x 2)))
+	      (lambda (x) (> x k))
+	      (lambda (x) (if (prime? (marsenne-prime x)) (list (perfect x)) '()))))
 
 
 
