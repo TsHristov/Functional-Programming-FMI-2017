@@ -98,11 +98,24 @@
 
 ;;increasing?: Checks if the digits of a number are in increasing order, read from left to right:
 (define (increasing? number)
-  (define (last-digit number) (remainder number 10))
-  (define (last-but-one number) (remainder (quotient number 10) 10))
-  (if (or (< (last-digit number) (last-but-one number)) (= number 0))
+  (define (last number)(remainder number 10))
+  (define (last-but-one number)(remainder (quotient number 100) 10))
+  (define (broken-relation? number)
+    (<= (last number) (last-but-one number)))
+  (if (or (broken-relation? number) (= number 0))
       #f
       (or #t (increasing? (quotient number 10)))))
 
-;;to-binary:
-;;to-decimal:
+;;to-binary: Converts given number to binary:
+(define (to-binary number)
+  (define (binary number step)
+    (if (= number 0) 0
+	(+ (* (remainder number 2) (expt 10 step)) (binary (quotient number 2) (+ step 1)))))
+  (binary number 0))
+
+;;to-decimal: Converts given binary number to decimal:
+(define (to-decimal number)
+  (define (decimal number step)
+    (if (= number 0) 0
+	(+ (* (remainder number 10) (expt 2 step)) (decimal (quotient number 10) (+ step 1)))))
+  (decimal number 0))
