@@ -72,7 +72,7 @@
       (else #f)))
   (accumulate '() append 1
 	      (lambda (x) (+ x 1))
-	      (lambda (x) (> x 500))
+	      (lambda (x) (> x 1000))
 	      (lambda (x) (if (and (ends-with-6-or-8? x) (= x (aliquot-sum x))) (list x) '()))))
 
 ;;perfect-numbers: Finds perfect numbers using coefficient k (using Euclid-Euler theorem):
@@ -84,3 +84,25 @@
 	      (lambda (x) (if (even? x) (+ x 1) (+ x 2)))
 	      (lambda (x) (> x k))
 	      (lambda (x) (if (prime? (marsenne-prime x)) (list (perfect x)) '()))))
+
+;;reverse-int: Reverses the numbers of a given number:
+(define (reverse-int number)
+  (define (reverse number reversed)
+    (if (= number 0) reversed
+	(reverse (quotient number 10) (+ (* reversed 10) (remainder number 10)))))
+  (reverse number 0))
+
+;;palindrome?: Checks if a number is a palindrome:
+(define (palindrome? number)
+  (= number (reverse-int number)))
+
+;;increasing?: Checks if the digits of a number are in increasing order, read from left to right:
+(define (increasing? number)
+  (define (last-digit number) (remainder number 10))
+  (define (last-but-one number) (remainder (quotient number 10) 10))
+  (if (or (< (last-digit number) (last-but-one number)) (= number 0))
+      #f
+      (or #t (increasing? (quotient number 10)))))
+
+;;to-binary:
+;;to-decimal:
