@@ -1,5 +1,5 @@
 ;; Task 1:
-;; search: Use the "Bisection method" to find a root of a continuous function f in
+;; search: Bisection method to find a root of a continuous function f in
 ;;         the interval [a, b]:
 (define (search f a b)
   (define precision 0.001)
@@ -10,6 +10,15 @@
 	 ((< (* (f b) (f c)) 0) (search f c b))))))
 
 ;; Task 2:
+;; square-root: Newton`s Iteration method for computing the square root of n:
+(define (square-root n)
+  (define precision 0.0001)
+  (define (reccurence n seed)
+    (let ((new-seed (* (+ seed (/ n seed)) 0.5)))
+      (if (= (- new-seed (sqrt n)) precision) new-seed
+	  (reccurence n (new-seed)))))
+   (reccurence n 1))
+
 ;; Task 3:
 ;; Task 4:
 ;; derivative: Function that calculates the first derivative of a given function f:
