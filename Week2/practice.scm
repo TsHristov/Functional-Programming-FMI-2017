@@ -85,7 +85,7 @@
 	      (lambda (x) (> x k))
 	      (lambda (x) (if (prime? (marsenne-prime x)) (list (perfect x)) '()))))
 
-;;reverse-int: Reverses the numbers of a given number:
+;;reverse-int: Reverses the digits of a given number:
 (define (reverse-int number)
   (define (reverse number reversed)
     (if (= number 0) reversed
