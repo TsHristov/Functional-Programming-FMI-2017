@@ -20,21 +20,28 @@
    (reccurence n 1))
 
 ;; Task 3:
+;; continued-fraction: Calculates continued fraction up to the kth:
+(define (continued-fraction n d k)
+  (if (= k 0) 0
+      (/ n (+ d (continued-fraction n d (- k 1))))))
+
 ;; Task 4:
-;; derivative: Function that calculates the first derivative of a given function f:
+;; first-derivative: Calculates the first derivative of a function f:
+(define (first-derivative f x)
+  (define precision 0.001)
+  (/ (- (f (+ x precision)) (f x)) precision))
 
 ;; Task 5:
-;; compose: Function that returns the composition of f and g -> (f(g(x)))
+;; compose: Returns the composition of functions f and g:
 (define (compose f g) (lambda (x) (f (g x))))
 
 ;; Task 6:
-;; double: Function that returns a function that is applied 2 times:
-(define (double f) (lambda (x) (f (f x))))
+;; twice: Returns a function that is applied 2 times:
+(define (twice f) (lambda (x) (f (f x))))
 
 ;; Task 7:
-;; repeat: Function that return a function f that is applied n times:
-(define (repeat f n)
+;; repeat: Returns a function that is applied n times:
+(define (apply-n-times f n)
   (lambda (x)
     (if (zero? n) x
-	(f ((repeat f (- n 1)) x)))))
-
+	(f ((apply-n-times f (- n 1)) x)))))
