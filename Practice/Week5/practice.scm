@@ -18,8 +18,8 @@
 ;; Example:
 ;;     (append* (list 2 3) (list 3 4)) -> (2 3 3 4)
 (define (append* l1 l2)
-  (if (null? l2) l1
-      (cons (car l1) (car l2) (append* l1 (cdr l2)))))
+  (if (null? l1) l2
+      (cons (car l1) (append* (cdr l1) l2))))
 
 ;; reverse*: Reverse a list:
 ;; Example:
@@ -37,22 +37,22 @@
   (define (unify appended res)
     (cond
      ((null? appended) res)
-     ((not (member* (car appended) res))
+     ((not (member? (car appended) res))
       (unify (cdr appended) (append res (list (car appended)))))
      (else (unify (cdr appended) res))))
-  (unify appended '()))cons
+  (unify appended '()))
 
 ;; intersection*: Find the intersection of two lists:
 ;; Example:
 ;;     (intersection* (list 1 2 3) (list 2 4 5)) -> (2)
 ;;     (intersection* (list 1 2 3) (list 4 5 6)) -> ()
 (define (intersection* l1 l2)
-  (define (helper l1 l2 res)
+  (define (intersect l1 l2 res)
     (if (null? l1) res
-      (if (and (not (member* (car l1) res)) (member* (car l1) l2))
-	  (helper (cdr l1) l2 (cons (car l1) res))
-	  (helper (cdr l1) l2 res))))
-  (helper l1 l2 '()))
+      (if (and (not (member? (car l1) res)) (member? (car l1) l2))
+	  (intersect (cdr l1) l2 (cons (car l1) res))
+	  (intersect (cdr l1) l2 res))))
+  (intersect l1 l2 '()))
 
 ;; slice*: Slice a given list from index i to index j:
 ;; Example:
