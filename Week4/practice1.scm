@@ -51,10 +51,10 @@
        (accumulate (cons (cdar l1) (cddr 2)))))
 
 ;; remove-first: Removes the first occurence of an element x in l:
-(define (remove-first l x)
+(define (remove-first x l)
   (if (null? l) l
       (if (= (car l) x) (cdr l)
-	  (cons (car l) (remove-first (cdr l) x)))))
+	  (cons (car l) (remove-first x (cdr l))))))
 
 ;; remove-first*: Remove first occurence of an element x with filter:
 
@@ -91,11 +91,12 @@
 ;; q-sort: Quick sort implementation:
 (define (q-sort l)
   (if (null? l) l
-      (append q-sort (filter* l (lambda (x) (< x (car l))))
+      (append (q-sort (filter* l (lambda (x) (< x (car l)))))
 	      (list (car l))
 	      (q-sort (filter* (cdr l) (lambda (x) (not (< x (car l)))))))))
 
 ;; merge-sort: Merge sort implementation:
+;; FIX IT!
 (define (merge l1 l2)
   (cond
    ((null? l1) l2)
@@ -105,4 +106,4 @@
 
 (define (merge-sort l)
   (if (or (null? l) (null? (cdr l))) l
-      (merge (merge-sort (take-n l (/ (len l) 2)) (drop-n l (/ (len l) 2))))))
+      (merge-sort (merge (take-n (/ (length l) 2) l) (drop-n (/ (length l) 2) l)))))
