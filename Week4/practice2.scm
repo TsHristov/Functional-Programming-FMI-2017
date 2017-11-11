@@ -59,6 +59,10 @@
 (define (divisors-sum** n)
   (filter-accumulate + 0 1 n id 1+ (lambda (i) (= (remainder n i) 0))))
 
+;; count: Count of numbers that hold true for the given predicate in the interval [a, b]:
+(define (count p? a b)
+  (filter-accumulate-i + 0 a b (lambda (x) 1) 1+ p?))
+	      
 ;; all?: Checks whether the predicate is true for all number in the interval [a, b]:
 (define (all p? a b)
   (accumulate (lambda (x y) (and x y)) #t a b p? 1+))
@@ -66,6 +70,12 @@
 ;; any?: Checks whether the predicate is true for any of the numbers in the interval [a, b]:
 (define (any? p? a b)
   (accumulate (lambda (x y) (or x y)) #f a b p? 1+))
+
+;; prime?: Check if a number is prime via accumulate:
+(define (prime? n)
+  (define (divisor? x n) (= (remainder n x) 0))
+  (cond ((< n 2) #f)
+   (else (accumulate-i (lambda (x y) (and x y)) #t 2 (floor (sqrt n)) (lambda (x) (not (divisor? x n))) 1+))))
 
 ;; flip: Returns function with swapped parameters:
 (define (flip f) (lambda (x y) (f y x)))
