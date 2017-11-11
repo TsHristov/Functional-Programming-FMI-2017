@@ -49,9 +49,29 @@
      ((> n j) '())))
   (slice l 0))
 
-;; any?:
-;; all?:
-;; member-deep?: Finds en element x in a nested lists
+;; any?: Returns #t if the predicate p? applies to any of the elements of the list l:
+(define (accumulate l f initial)
+  (if (null? l) initial
+      (accumulate (cdr l) f (f initial (car l)))))
+
+(define (any? p? l)
+  (accumulate l (lambda (initial x) (or (p? x) initial)) #f))
+
+;; all?: Returns #t if the predicate p? applies to all of the elements of the list l:
+(define (all? p? l)
+  (accumulate l (lambda (initial x) (and (p? x) initial)) #t))
+
+;; member-deep?: Finds an element x in a nested list structure:
+;; Example:
+;;      (member-deep? 2 '((1 (3)) ((1 (1 (1 (2))))))) -> #t
+(define (member-deep? x l)
+  (define (atom? l) (and (not (null? l)) (not (pair? l))))
+  (cond
+   ((null? l) #f)
+   ((atom? l) (equal? x l))
+   (else (or (member-deep? x (car l))
+	     (member-deep? x (cdr l))))))
+
 ;; flatten: Flattens a nested lists:
 ;; cartesion-product: Example: (1 2 3) (3 4) -> ((1 3) (1 4) (2 3) (2 4) ... )
 
