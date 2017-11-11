@@ -66,3 +66,11 @@
 ;; any?: Checks whether the predicate is true for any of the numbers in the interval [a, b]:
 (define (any? p? a b)
   (accumulate (lambda (x y) (or x y)) #f a b p? 1+))
+
+;; flip: Returns function with swapped parameters:
+(define (flip f) (lambda (x y) (f y x)))
+
+;; complement: Function that gives the negation of a given predicate:
+(define (complement p) (lambda (x) (not (p x))))
+
+
