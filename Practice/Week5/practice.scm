@@ -1,3 +1,8 @@
+;; accumulate: Accumulator over a list:
+(define (accumulate l f initial)
+  (if (null? l) initial
+      (accumulate (cdr l) f (f initial (car l)))))
+
 ;; member?: Check if element is a member of a list:
 ;; Example:
 ;;     (member? 2 (list 1 3 4)) -> #f
@@ -62,16 +67,12 @@
 
 (define (slice l i j)
   (let ((range-length (+ (- j i) 1)))
-    (take (+ (- j i) 1) (drop i l))))
+    (take range-length (drop i l))))
 
 ;; any?: Returns #t if the predicate p? applies to any of the elements of the list l:
 ;; Example:
 ;;     (any? even? (list 1 2 3)) -> #t
 ;;     (any? odd? (list 2 4)) -> #f
-(define (accumulate l f initial)
-  (if (null? l) initial
-      (accumulate (cdr l) f (f initial (car l)))))
-
 (define (any? p? l)
   (accumulate l (lambda (initial x) (or (p? x) initial)) #f))
 
