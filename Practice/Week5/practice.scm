@@ -54,19 +54,21 @@
 	  (intersect (cdr l1) l2 res))))
   (intersect l1 l2 '()))
 
-;; slice*: Slice a given list from index i to index j:
+;; slice: Slice a given list from index i to index j:
 ;; Example:
-;;     (slice* (list 1 2 3 4) 0 3) -> (1 2 3 4)
-;;     (slice* (list 1 2 3) 1 1) -> (2)
-(define (slice* l i j)
-  (if (> i j) '())
-  (define (slice l n)
-    (cond
-     ((null? l) l)
-     ((< n i) (slice (cdr l) (+ n 1)))
-     ((<= n j) (cons (car l) (slice (cdr l) (+ n 1))))
-     ((> n j) '())))
-  (slice l 0))
+;;     (slice (list 1 2 3 4) 0 3) -> (1 2 3 4)
+;;     (slice (list 1 2 3) 1 1) -> (2)
+(define (take n l)
+  (if (or (= n 0) (null? l)) '()
+      (cons (car l) (take (- n 1) (cdr l)))))
+
+(define (drop n l)
+  (if (= n 0) l
+      (drop (- n 1) (cdr l))))
+
+(define (slice l i j)
+  (let ((range-length (+ (- j i) 1)))
+    (take (+ (- j i) 1) (drop i l))))
 
 ;; any?: Returns #t if the predicate p? applies to any of the elements of the list l:
 ;; Example:
