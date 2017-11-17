@@ -28,31 +28,25 @@
   (if (null? l) l
       (append (reverse* (cdr l)) (list (car l)))))
 
-;; union*: Find the union of two lists:
+;; union: Find the union of two lists:
 ;; Example:
-;;     (union* (list 1 2 3) (list 2 2 2 4)) -> (1 2 3 4)
-;;     (union* '() (list 2 3 4)) -> (2 3 4)
-(define (union* l1 l2)
-  (define appended (append l1 l2))
-  (define (unify appended res)
-    (cond
-     ((null? appended) res)
-     ((not (member? (car appended) res))
-      (unify (cdr appended) (append res (list (car appended)))))
-     (else (unify (cdr appended) res))))
-  (unify appended '()))
+;;     (union (list 1 2 3) (list 2 2 2 4)) -> (1 2 3 4)
+;;     (union '() (list 2 3 4)) -> (2 3 4)
+(define (union l1 l2)
+  (cond
+   ((null? l1) l2)
+   ((not (member (car l1) l2)) (cons (car l1) (union (cdr l1) l2)))
+   (else (union (cdr l1) (cdr l2)))))
 
-;; intersection*: Find the intersection of two lists:
+;; intersection: Find the intersection of two lists:
 ;; Example:
-;;     (intersection* (list 1 2 3) (list 2 4 5)) -> (2)
-;;     (intersection* (list 1 2 3) (list 4 5 6)) -> ()
-(define (intersection* l1 l2)
-  (define (intersect l1 l2 res)
-    (if (null? l1) res
-      (if (and (not (member? (car l1) res)) (member? (car l1) l2))
-	  (intersect (cdr l1) l2 (cons (car l1) res))
-	  (intersect (cdr l1) l2 res))))
-  (intersect l1 l2 '()))
+;;     (intersection (list 1 2 3) (list 2 4 5)) -> (2)
+;;     (intersection (list 1 2 3) (list 4 5 6)) -> ()
+(define (intersection l1 l2)
+  (cond
+   ((null? l1) '())
+   ((member (car l1) l2) (cons (car l1) (intersection (cdr l1) l2)))
+   (else (intersection (cdr l1) (cdr l2)))))
 
 ;; slice: Slice a given list from index i to index j:
 ;; Example:
@@ -120,4 +114,3 @@
      (else (append (list (list (car l1) (car l2-copy)))
 		   (helper l1 (cdr l2-copy))))))
   (helper l1 l2-copy))
-
