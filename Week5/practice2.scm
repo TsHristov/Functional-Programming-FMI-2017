@@ -34,15 +34,10 @@
      (else (cons (remainder n 10) (digits (quotient n 10))))))
   (reverse* (digits n)))
 
-;; zip: Zips two lists:
-(define (zip l1 l2)
+;; zip*: Zips two lists together with a given function:
+(define (zip* f l1 l2)
   (if (or (null? l1) (null? l2)) '()
-      (cons (cons (car l1) (car l2)) (zip (cdr l1) (cdr l2)))))
-
-;; zip-with: Zips two lists with applied function:
-(define (zip-with f l1 l2)
-  (if (or (null? l1) (null? l2)) '()
-      (cons (f (car l1) (car l2)) (zip-with f (cdr l1) (cdr l2)))))
+      (cons (f (car l1) (car l2)) (zip* f (cdr l1) (cdr l2)))))
 
 ;; sorted: Checks if the array is in ascending order:
 (define (sorted l)
@@ -69,3 +64,15 @@
   (append (filter* l (lambda (x) (< x val)))
 	  (list val)
 	  (filter* l (lambda (x) (>= x val)))))
+
+;; insertion-sort: Performs insertion-sort on a list and returns it`s sorted version:
+(define (insertion-sort l)
+  (define (helper l res)
+    (if (null? l) res
+	(helper (cdr l) (insert-in-sorted (car l) res))))
+  (helper l '()))
+
+;; arity: Returns the number of parameters passed to the function:
+(define (arity . xs) (length xs))
+
+
