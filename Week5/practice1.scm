@@ -20,15 +20,18 @@
 (define (member-deep? x l)
   (and (not (null? l))
        (or (equal? x l)
-	   (member-deep? x (car l))
-	   (and (pair? l) (member-deep? x (cdr l))))))
+	   (and (pair? l)
+		(or (member-deep? x (car l))
+		    (member-deep? x (cdr l)))))))
+
+
+;; get: Get element at a given position from a list:
+(define (get l n)
+  (if (= n 0) (car l)
+      (get (cdr l) (- n 1))))
 
 ;; get-at: Get element at position [row, col] from a given matrix:
 (define (get-at matrix row col)
-  (define (get l i)
-    (if (= i 0)
-	(car l)
-	(get (cdr l) (- i 1))))
   (get (get matrix row) col))
 
 ;; transpose: Transpose a given matrix:
@@ -39,7 +42,7 @@
   (> (length (filter matrix (lambda (x) (member x (cdr matrix))))) 1))
 
 ;; sum: Returns sum of elements in a list via foldr:
-(define (sum l) (foldr + 0 l))
+(define (sum l) (apply + l))
 
 ;; max: Finds the maximum of two numbers:
 (define (max x y) (if (> x y) x y))
