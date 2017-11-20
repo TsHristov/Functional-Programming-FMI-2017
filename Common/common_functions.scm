@@ -3,10 +3,24 @@
   (if (> a b) nv
       (op (term a) (accumulate-right op nv (next a) b term next))))
 
+;; filter-accumulate-right:
+(define (filter-accumulate-right op nv a b term next p?)
+  (cond
+   ((> a b) nv)
+   ((p? a) (op (term a) (filter-accumulate-right op nv (next a) b term next p?)))
+   (else (filter-accumulate-right op nv (next a) b term next p?))))
+
 ;; accumulate-left:
 (define (accumulate-left op nv a b term next)
   (if (> a b) nv
       (accumulate-left op (op nv (term a)) (next a) b term next)))
+
+;; filter-accumulate-left:
+(define (filter-accumulate-left op nv a b term next p?)
+  (cond
+   ((> a b) nv)
+   ((p? a) (filter-accumulate-left op (op nv (term a)) (next a) b term next p?))
+   (else (filter-accumulate-left op nv (next a) b term next p?))))
 
 ;; fold-right:
 (define (fold-right op nv l)
