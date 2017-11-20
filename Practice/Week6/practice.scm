@@ -62,3 +62,22 @@
     (flatten (map (lambda (row) (get-nth (car row) (cdr row)))
 		  (apply map list indices matrix)))))
 
+;; uniques: Returns the unique elements of a list:
+(define (uniques l)
+  (cond
+   ((null? l) '())
+   ((not (member (car l) (cdr l))) (cons (car l) (uniques (cdr l))))
+   (else (uniques (cdr l)))))
+
+;; is-magic-square?: Checks if a matrix is a magic square (same sums for columns, rows and diagonals):
+(define (is-magic-square? matrix)
+  (define same-sum (sum (car matrix)))
+  (= same-sum (sum (get-main-diagonal matrix))
+     (sum (get-anti-diagonal matrix))
+     (sum (uniques (map sum (append matrix (transpose matrix)))))))
+
+
+
+
+
+     
