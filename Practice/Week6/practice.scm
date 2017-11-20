@@ -1,19 +1,24 @@
-(define (foldr op nv l)
-  (if (null? l) nv
-      (op (car l) (foldr op nv (cdr l)))))
-
-(define (foldl op nv l)
-  (if (null? l) nv
-      (foldl op (op nv (car l)) (cdr l))))
+(load "../../Common/common_functions.scm")
 
 ;; map*: Map via foldr:
 (define (map* f l)
-  (foldr (lambda (x nv) (cons (f x) nv)) '() l))
+  (fold-right (lambda (x nv) (cons (f x) nv)) '() l))
 
 ;; reverse*: Reverse via foldr:
 (define (reverse* l)
-  (foldr (lambda (x y) (append y (list x)) '() l)))
+  (fold-right (lambda (x y) (append y (list x))) '() l))
 
 ;; reverse**: Reverse via foldl:
 (define (reverse** l)
-  (foldl (lambda (x y) (cons y x)) '() l))
+  (fold-left (lambda (x y) (cons y x)) '() l))
+
+;; matrix-sum: Finds the sum of all elements in a matrix:
+(define (sum l) (apply + l))
+(define (matrix-sum matrix)
+  (sum (map (lambda (x) (sum x)) matrix)))
+
+;; matrix-min: Find the minimum element of a matrix:
+(define (matrix-min matrix)
+  (define (min x y) (if (< x y) x y))
+  (define (min-el l) (fold-right min (car l) l))
+  (min-el (map min-el matrix)))
