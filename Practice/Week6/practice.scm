@@ -42,12 +42,17 @@
 (define (nth-column nth matrix)
   (get-nth nth (transpose matrix)))
 
-;; diagonal: Gets the diagonal of a given matrix:
-(define (from-to a b)
+
+;; range: Generates a range list [a,b]:
+(define (range a b)
   (accumulate-right cons '() a b (lambda (x) x) (lambda (x) (+ x 1))))
 
-(define (diagonal matrix)
-  (let ((indices (from-to 1 (length (car matrix)))))
-    (map (lambda (row) (get-nth (car x) (cdr x)))
-	 (apply map list indices matrix))))
+;; flatten: Flattens a nested list structure:
+(define (flatten l) (deep-fold '() list append l))
+
+;; get-diagonal: Gets the diagonal of a given matrix:
+(define (get-diagonal matrix)
+  (let ((indices (range 1 (length (car matrix)))))
+    (flatten (map (lambda (row) (get-nth (car row) (cdr row)))
+		  (apply map list indices matrix)))))
 
