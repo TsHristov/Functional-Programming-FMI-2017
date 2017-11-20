@@ -50,9 +50,15 @@
 ;; flatten: Flattens a nested list structure:
 (define (flatten l) (deep-fold '() list append l))
 
-;; get-diagonal: Gets the diagonal of a given matrix:
-(define (get-diagonal matrix)
+;; get-main-diagonal: Gets the main diagonal of a matrix:
+(define (get-main-diagonal matrix)
   (let ((indices (range 1 (length (car matrix)))))
+    (flatten (map (lambda (row) (get-nth (car row) (cdr row)))
+		  (apply map list indices matrix)))))
+
+;; get-anti-diagonal: Gets the anti-diagonal of a matrix:
+(define (get-anti-diagonal matrix)
+  (let ((indices (reverse (range 1 (length (car matrix))))))
     (flatten (map (lambda (row) (get-nth (car row) (cdr row)))
 		  (apply map list indices matrix)))))
 
