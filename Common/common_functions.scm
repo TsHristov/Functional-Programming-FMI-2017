@@ -33,9 +33,9 @@
       (fold-left op (op nv (car l)) (cdr l))))
 
 ;; map:
-(define (map f l)
+(define (map* f l)
   (if (null? l) '()
-      (cons (f (car l)) (map f (cdr l)))))
+      (cons (f (car l)) (map* f (cdr l)))))
 
 ;; filter:
 (define (filter p? l)
@@ -52,3 +52,12 @@
    ((atom? l) (term l))
    (else (op (deep-fold nv term op (car l))
 	     (deep-fold nv term op (cdr l))))))
+
+;; search: Checks if there is an element in l with property p:
+(define (search p l)
+  (and (not (null? l))
+       (or (p (car l)) (search p (cdr l)))))
+
+;; forall: Checks if all elements in l are with given property p:
+(define (forall p l)
+  (not (search (lambda (x) (not (p x)))) l))
