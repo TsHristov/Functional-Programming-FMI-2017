@@ -59,3 +59,13 @@
   	   (< (root-tree tree) (root-tree (right-tree tree))))
        (is-BST? (left-tree tree))
        (is-BST? (right-tree tree)))))
+
+;; BST-insert: Insert a given value in a Binary Search Tree:
+(define (BST-insert value tree)
+  (cond
+   ((empty-tree? tree) (make-leaf value))
+   ((< value (root-tree tree))
+    (make-tree (root-tree tree) (BST-insert value (left-tree tree)) (right-tree tree)))
+   ((> value (root-tree tree))
+    (make-tree (root-tree tree) (left-tree tree) (BST-insert value (right-tree tree))))
+   (else tree)))
