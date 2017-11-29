@@ -1,8 +1,3 @@
-;; accumulate: Accumulator over a list:
-(define (accumulate l f initial)
-  (if (null? l) initial
-      (accumulate (cdr l) f (f initial (car l)))))
-
 ;; member?: Check if element is a member of a list:
 ;; Example:
 ;;     (member? 2 (list 1 3 4)) -> #f
@@ -67,12 +62,16 @@
 
 (define (slice l i j)
   (let ((range-length (+ (- j i) 1)))
-    (take range-length (drop i l))))
+    (take (+ (- j i) 1) (drop i l))))
 
 ;; any?: Returns #t if the predicate p? applies to any of the elements of the list l:
 ;; Example:
 ;;     (any? even? (list 1 2 3)) -> #t
 ;;     (any? odd? (list 2 4)) -> #f
+(define (accumulate l f initial)
+  (if (null? l) initial
+      (accumulate (cdr l) f (f initial (car l)))))
+
 (define (any? p? l)
   (accumulate l (lambda (initial x) (or (p? x) initial)) #f))
 
@@ -107,11 +106,4 @@
 ;; Example:
 ;;     (cartesian-product (list 1 2 3) (list 3 4)) -> ((1 3) (1 4) (2 3) (2 4) (3 3) (3 4))
 (define (cartesian-product l1 l2)
-  (define l2-copy l2)
-  (define (helper l1 l2-copy)
-    (cond
-     ((null? l1) '())
-     ((null? l2-copy) (helper (cdr l1) l2))
-     (else (append (list (list (car l1) (car l2-copy)))
-		   (helper l1 (cdr l2-copy))))))
-  (helper l1 l2-copy))
+  (map (lambda (x) (map (lambda (y) (cons x y)) l2)) l1))
