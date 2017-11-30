@@ -32,6 +32,22 @@
   (if (null? l) nv
       (fold-left op (op nv (car l)) (cdr l))))
 
+;; all?:
+(define (all? p? l)
+  (fold-right (lambda (x y) (and (p? x) y)) #t l))
+
+;; any?:
+(define (any? p? l)
+  (fold-right (lambda (x y) (or (p? x) y)) #f l))
+
+;; flatten:
+(define (flatten l)
+  (define (atom? l) (and (not (null? l)) (not (pair? l))))
+  (cond
+   ((null? l) l)
+   ((atom? l) (list l))
+   (else (append (flatten-tree (car l))
+		 (flatten-tree (cdr l))))))
 ;; map:
 (define (map* f l)
   (if (null? l) '()

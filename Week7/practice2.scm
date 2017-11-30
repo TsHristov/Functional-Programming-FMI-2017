@@ -1,3 +1,5 @@
+(load "../Common/common_functions.scm")
+
 (define root-tree car)
 (define left-tree cadr)
 (define right-tree caddr)
@@ -48,15 +50,15 @@
       (append (inorder (left-tree tree))
 	      (list (root-tree tree))
 	      (inorder (right-tree tree)))))
-
+      
 ;; is-BST?: Checks if a tree is a Binary Search Tree:
 (define (is-BST? tree)
   (or (empty-tree? tree)
       (and
        (or (empty-tree? (left-tree tree))
-  	   (> (root-tree tree) (root-tree (left-tree tree))))
+	   (all? (lambda (node) (< node (root-tree tree))) (flatten (left-tree tree))))
        (or (empty-tree? (right-tree tree))
-  	   (< (root-tree tree) (root-tree (right-tree tree))))
+	   (all? (lambda (node) (> node (root-tree tree))) (flatten (right-tree tree))))
        (is-BST? (left-tree tree))
        (is-BST? (right-tree tree)))))
 
