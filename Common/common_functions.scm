@@ -1,3 +1,25 @@
+;; take:
+(define (take n l)
+  (if (or (= n 0) (null? l)) '()
+      (cons (car l) (take (- n 1) (cdr l)))))
+
+;; drop:
+(define (drop n l)
+  (if (= n 0) l
+      (drop (- n 1) (cdr l))))
+
+;; get-nth:
+(define (get-nth n l)
+  ;; take: Take the first n elements of a list:
+  (define (take n l)
+    (if (or (= n 0) (null? l)) '()
+	(cons (car l) (take (- n 1) l))))
+  ;; drop: Drop the first n elements of a list:
+  (define (drop n l)
+    (if (or (= n 0) (null? l)) l
+	(drop (- n 1) (cdr l))))
+  (take 1 (drop (- n 1) l)))
+
 ;; accumulate-right:
 (define (accumulate-right op nv a b term next)
   (if (> a b) nv
@@ -46,8 +68,8 @@
   (cond
    ((null? l) l)
    ((atom? l) (list l))
-   (else (append (flatten-tree (car l))
-		 (flatten-tree (cdr l))))))
+   (else (append (flatten (car l))
+		 (flatten (cdr l))))))
 ;; map:
 (define (map* f l)
   (if (null? l) '()
