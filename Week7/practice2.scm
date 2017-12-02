@@ -49,3 +49,15 @@
    ((> value (root-tree tree))
     (make-tree (root-tree tree) (left-tree tree) (BST-insert value (right-tree tree))))
    (else tree)))
+
+;; BST-construct: Construct a Binary Search Tree from a sorted list:
+(define (middle l)
+  (let ((length/2 (quotient (length l) 2)))
+    (car (get-nth (+ length/2 1) l))))
+
+(define (BST-construct l)
+  (if (null? l) l
+      (make-tree (middle l)
+		 (BST-construct (filter (lambda (node) (< node (middle l))) l))
+		 (BST-construct (filter (lambda (node) (> node (middle l))) l)))))
+
