@@ -40,3 +40,7 @@
 (define (predecessors vertex graph)
   (vertices (filter (lambda (x) (member vertex (successors (car x) graph))) graph)))
 
+;; extend-path: Return all possible path extensions with one edge of a given path of vertices:
+(define (extend-path path graph)
+  (map (lambda (x) (append path (list x)))
+       (filter (lambda (x) (not (member x path))) (successors (car (reverse path)) graph))))
