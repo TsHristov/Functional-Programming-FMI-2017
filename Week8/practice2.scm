@@ -1,10 +1,5 @@
-(define graph '((a b c d) ; от а има ребра към b,c,d
-		(b e f)   ; може да бъде и ориентиран
-		(c a d)
-		(d b c g)
-		(e)       ; връх без наследници
-		(f b e)
-		(g a)))
+;; sample-graph: Graph representation via list of descendants (directed):
+(define sample-graph '((a b c d) (b e f) (c a d) (d b c g) (e) (f b e) (g a)))
 
 ;; vertices: Return the verices of a given graph:
 (define (vertices graph)
@@ -65,3 +60,17 @@
 	      (traverse (append (cdr queue) descendants) (append visited current-vertex))
 	      (traverse (cdr queue) (append visited current-vertex))))))
   (traverse (list start-vertex) '()))
+
+;; DFS: Perform DFS on the given graph:
+(define (DFS start-vertex graph)
+  (define (traverse stack visited)
+    (if (null? stack) visited
+	(let ((descendants (filter (lambda (vertex) (and (not (member vertex visited))
+							 (not (member vertex stack))))
+				   (successors (car stack) graph)))
+	      (current-vertex (list (car stack))))
+	  (if (not (null? descendants))
+	      (traverse (append descendants (cdr stack)) (append visited current-vertex))
+	      (traverse (cdr stack) (append visited current-vertex))))))
+  (traverse (list start-vertex) '()))
+
