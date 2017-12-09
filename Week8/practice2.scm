@@ -7,7 +7,8 @@
 
 ;; successors: Return the successors of a given vertex in a graph:
 (define (successors vertex graph)
-  (cdr (assoc vertex graph)))
+  (if (not (assoc vertex graph)) '()
+      (cdr (assoc vertex graph))))
 
 ;; has-edge?: Check if path exists between vertex u and vertex v (directed graph):
 (define (has-edge? u v graph)
@@ -27,10 +28,11 @@
 			 (append x (list v))
 			 x))
 	 (add-vertex v graph)))
-   (else (map (lambda (x) (if (equal? u (car x))
-			      (append x (list v))
-			      x)))
-	 graph)))
+   ((member v (vertices graph))
+    (map (lambda (x) (if (equal? u (car x))
+			 (append x (list v))
+			 x))
+    graph))))
 
 ;; path-exists?: Check if the given path of vertices exists in the graph:
 (define (path-exists? path graph)
@@ -47,6 +49,18 @@
 (define (extend-path path graph)
   (map (lambda (x) (append path (list x)))
        (filter (lambda (x) (not (member x path))) (successors (car (reverse path)) graph))))
+
+;; edge-list: Return the edges of the graph:
+(define (edge-list graph)
+  (apply append (map (lambda (vertex)
+		       (map (lambda (successor) (cons vertex successor)) (successors vertex graph)))
+		     (vertices graph))))
+
+;; delete-edge: Delete an edge between two vertices in the graph:
+(define (delete-edge predecessor successor graph)
+  (map (lambda (x) (if (equal? (car x) predecessor)
+		       (filter (lambda (y) (not (equal? y successor))) x)
+		       x)) graph))
 
 ;; BFS: Perform BFS on the given graph:
 (define (BFS start-vertex graph)
@@ -73,4 +87,3 @@
 	      (traverse (append descendants (cdr stack)) (append visited current-vertex))
 	      (traverse (cdr stack) (append visited current-vertex))))))
   (traverse (list start-vertex) '()))
-
