@@ -1,3 +1,11 @@
+(define graph '((a b c d) ; от а има ребра към b,c,d
+		(b e f)   ; може да бъде и ориентиран
+		(c a d)
+		(d b c g)
+		(e)       ; връх без наследници
+		(f b e)
+		(g a)))
+
 ;; vertices: Return the verices of a given graph:
 (define (vertices graph)
   (map car graph))
@@ -44,3 +52,16 @@
 (define (extend-path path graph)
   (map (lambda (x) (append path (list x)))
        (filter (lambda (x) (not (member x path))) (successors (car (reverse path)) graph))))
+
+;; BFS: Perform BFS on the given graph:
+(define (BFS start-vertex graph)
+  (define (traverse queue visited)
+    (if (null? queue) visited
+	(let ((descendants (filter (lambda (vertex) (and (not (member vertex visited))
+							 (not (member vertex queue))))
+				   (successors (car queue) graph)))
+	      (current-vertex (list (car queue))))
+	  (if (not (null? descendants))
+	      (traverse (append (cdr queue) descendants) (append visited current-vertex))
+	      (traverse (cdr queue) (append visited current-vertex))))))
+  (traverse (list start-vertex) '()))
