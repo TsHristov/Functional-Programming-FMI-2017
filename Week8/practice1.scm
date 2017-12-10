@@ -25,50 +25,55 @@
   (define MAX_DISTANCE 9999999999)
   (define distance cdr)
   (define vertex car)
-  ;; --------------- Utility functions: -------------------
-  ;; ------------------------------------------------------
-  ;; get-distance: Get distance associated with a given vertex in the graph:
+  ;; ----------------------------- Utility functions: ----------------------------------
+  ;; -----------------------------------------------------------------------------------
+  ;; get-distance: Gets the distance associated with a given vertex in the graph:
   (define (get-distance vertex distances)
-    (distance (filter (lambda (x) (equal? (vertex x) vertex)) distances)))
-  ;; -------------------------------------------------------
+    (distance (car (filter (lambda (x) (equal? (vertex x) vertex)) distances))))
+  ;; -----------------------------------------------------------------------------------
   ;; initialize-distances: Initialize all distances at the start of the algorithm.
-  ;;     Distance 0 for start vertex.
-  ;;     Distance Infinity for all other vertices.
+  ;;     -Distance 0 for start vertex.
+  ;;     -Distance MAX_DISTANCE for all other vertices.
   (define (initialize-distances start vertices)
-    (map (lambda (node) (if (not (equal? node start))
-			    (cons node MAX_DISTANCE)
-			    (cons node 0)))
+    (map (lambda (vertex) (if (not (equal? vertex start))
+			    (cons vertex MAX_DISTANCE)
+			    (cons vertex 0)))
 	 vertices))
-  ;; --------------------------------------------------------
-  ;; select-min-distance: Choose the vertex with minimal distance
-  (define (select-min-distance distances)
-    (define min-distance (apply min (map cdr distances)))
-    ;; If there are many, choose first:
-    (caar (filter (lambda (x) (equal? (distance x) min-distance)) distances)))
-  ;; --------------------------------------------------------
-  (define (get-unvisited-vertex vertex unvisited)
-    (filter (lambda (x) (equal? x vertex)) unvisited))
+  ;; -----------------------------------------------------------------------------------
+  ;; min-distance-vertex: Choose the unvisited vertex with minimal distance.
+  (define (min-distance-vertex distances unvisited)
+    ;; Choose only from vertices that are unvisited:
+    (define (filter-distances distances unvisited)
+      (filter (lambda (x) (member (vertex x) unvisited)) distances))
+    ;; Find the minimal distance:
+    (define min-distance
+      (if (null? unvisited) '()
+	  (apply min (map cdr (filter-distances distances unvisited)))))
+    ;; Choose the unvisited vertex with the minimal distance:
+    (let ((min-vertex (filter (lambda (x) (and (member (vertex x) unvisited)
+					       (equal? (distance x) min-distance))) distances)))
+      (if (null? min-vertex) '()
+	  (car min-vertex))))
   ;; --------------------------------------------------------
   ;; update-distances: Update all neighbours distances.
   (define (update-distances distances descendants current-distance)
-    (map (lambda (x) (if (member (car x) descendants)
-			 (if (< (+ current-distance (cdr x)) (cdr x))
-			     (cons (cons (car x) (+ current-distance (cdr x)))
-				   (filter (lambda (x) (not (equal? (car x) (car x)))) distances))
-			     distances)
+    (define (descendant-distance descendant) (distance (assoc descendant descendants)))
+    (map (lambda (x) (if (assoc (vertex x) descendants)
+			 (if (< (+ current-distance (descendant-distance (vertex x)) (distance x)))
+			     (cons (vertex x) (+ current-distance (descendant-distance (vertex x))))
+			     (cons (vertex x) (distance x)))
 			 x))
 	 distances))
   ;; ------------------ Dijkstra's Algorithm: -------------------------
-  (let* ((start (list start-vertex))
-	 (unvisited (vertices graph))
-	 (distances (initialize-distances start unvisited)))
-    (define (run visited unvisited distances)
-      (let* ((current (get-unvisited-vertex (select-min distances)))
-	     (current-distance (get-distance current distances))
-	     (descendants (successors current graph)))
-	(if (null? current) visited
-	    (run (append visited current)
-		 (filter (lambda (x) (not (equal? x current))) unvisited)
-		 (update distances descendants current-distance)))))
-    (run '() unvisited distances)))
+  (define start (list start-vertex))
+  (define unvisited (vertices graph))
+  (define distances (initialize-distances start-vertex unvisited))
+  (define (run visited unvisited distances)
+    (let ((current (min-distance-vertex distances unvisited)))
+      (if (null? current) visited
+	  (let ((descendants (successors (vertex current) graph)))
+	       (run (append visited (list current))
+		    (filter (lambda (x) (not (equal? x (vertex current)))) unvisited)
+		    (update-distances distances descendants (distance current)))))))
+  (run '() unvisited distances))
   
