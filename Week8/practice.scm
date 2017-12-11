@@ -1,3 +1,4 @@
+;; weighted-graph: Graph representation via list of descendants (directed, weighted):
 (define weighted-graph '((A (B . 20) (G . 90) (D . 80))
 			 (B (F . 10))
 			 (C (D . 10) (H . 20) (F . 50))
@@ -8,7 +9,7 @@
 			 (G (A . 20))))
 
 ;; sample-graph: Graph representation via list of descendants (directed):
-(define sample-graph '((a b c d) (b e f) (c a d) (d b c g) (e) (f b e) (g a)))
+(define graph '((a b c d) (b e f) (c a d) (d b c g) (e) (f b e) (g a)))
 
 ;; vertices: Return the verices of a given graph:
 (define (vertices graph)
@@ -116,18 +117,12 @@
   ;; -----------------------------------------------------------------------------------
   ;; min-distance-vertex: Choose the unvisited vertex with minimal distance.
   (define (min-distance-vertex distances unvisited)
-    ;; Replicate problem:
-    ;; (dijkstra 'h test-graph)
-    ;; There are vertices that should not be there,
-    ;; caused by min function which returns vertices with
-    ;; MAX_DISTANCE, instead of none.
-    ;; Choose only from vertices that are unvisited:
-    (define (filter-distances distances unvisited)
+    (define (filter-distances distances)
       (filter (lambda (x) (member (vertex x) unvisited)) distances))
     ;; Find the minimal distance:
     (define min-distance
       (if (null? unvisited) '()
-	  (apply min (map cdr (filter-distances distances unvisited)))))
+	  (apply min (map cdr (filter-distances distances)))))
     ;; Choose the unvisited vertex with the minimal distance:
     (let ((min-vertex (filter (lambda (x) (and (member (vertex x) unvisited)
 					       (equal? (distance x) min-distance))) distances)))
