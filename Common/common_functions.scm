@@ -8,17 +8,15 @@
   (if (= n 0) l
       (drop (- n 1) (cdr l))))
 
+;; uniques:
+(define (uniques lst)
+  (cond
+   ((null? lst) '())
+   ((not (member (car lst) (cdr lst))) (cons (car lst) (uniques (cdr lst))))
+   (else (uniques (cdr lst)))))
+
 ;; get-nth:
-(define (get-nth n l)
-  ;; take: Take the first n elements of a list:
-  (define (take n l)
-    (if (or (= n 0) (null? l)) '()
-	(cons (car l) (take (- n 1) l))))
-  ;; drop: Drop the first n elements of a list:
-  (define (drop n l)
-    (if (or (= n 0) (null? l)) l
-	(drop (- n 1) (cdr l))))
-  (take 1 (drop (- n 1) l)))
+(define (get-nth n l) (car (drop (- n 1) l)))
 
 ;; accumulate-right:
 (define (accumulate-right op nv a b term next)
@@ -54,24 +52,12 @@
   (if (null? l) nv
       (fold-left op (op nv (car l)) (cdr l))))
 
-;; all?:
-(define (all? p? l)
-  (fold-right (lambda (x y) (and (p? x) y)) #t l))
-
 ;; any?:
 (define (any? p? l)
   (fold-right (lambda (x y) (or (p? x) y)) #f l))
 
-;; flatten:
-(define (flatten l)
-  (define (atom? l) (and (not (null? l)) (not (pair? l))))
-  (cond
-   ((null? l) l)
-   ((atom? l) (list l))
-   (else (append (flatten (car l))
-		 (flatten (cdr l))))))
 ;; map:
-(define (map* f l)
+(define (map f l)
   (if (null? l) '()
       (cons (f (car l)) (map* f (cdr l)))))
 
@@ -91,11 +77,17 @@
    (else (op (deep-fold nv term op (car l))
 	     (deep-fold nv term op (cdr l))))))
 
-;; search: Checks if there is an element in l with property p:
+;; flatten:
+(define (flatten l) (deep-fold '() list append l))
+
+;; search:
 (define (search p l)
   (and (not (null? l))
        (or (p (car l)) (search p (cdr l)))))
 
-;; forall: Checks if all elements in l are with given property p:
-(define (forall p l)
+;; any?:
+(define any? search)
+
+;; all?:
+(define (all? p l)
   (not (search (lambda (x) (not (p x)))) l))
