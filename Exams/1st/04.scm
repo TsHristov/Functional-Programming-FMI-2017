@@ -1,0 +1,17 @@
+(define (root tree) (car tree))
+(define (left tree) (cadr tree))
+(define (right tree) (caddr tree))
+(define empty-tree '())
+(define empty-tree? null?)
+
+(define (isomorphic? tree)
+  (define (isomorphic-subtrees? left-tree right-tree)
+    (or (empty-tree? tree)
+	(or (and (empty-tree? left-tree) (empty-tree? right-tree))
+	    (and (not (empty-tree? left-tree))
+		 (not (empty-tree? right-tree))
+		 (equal? (root left-tree) (root right-tree))
+		 (and (isomorphic-subtrees? (left left-tree) (left right-tree))
+		      (isomorphic-subtrees? (right left-tree) (right right-tree)))))))
+  (isomorphic-subtrees? (left tree) (right tree)))
+	  
