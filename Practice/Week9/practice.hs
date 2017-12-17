@@ -19,3 +19,17 @@ compress [x,y] = if x == y then [x] else [x, y]
 compress (x:y:xs)
   | x == y    = compress (y:xs)
   | otherwise = [x] ++ compress (y:xs)
+
+-- 4. Pack consecutive duplicates into sublists:
+--   Example: [1, 1, 1, 1, 2, 3, 3, 1, 1] => [[1, 1, 1, 1], [2], [3, 3], [1, 1]]
+pack :: (Eq a) => [a] -> [[a]]
+pack  [] = []
+pack [x] = [[x]]
+pack list
+  | current == next = [current] : pack (tail list)
+  | otherwise       = [[current]] ++ pack (tail list)
+  where current = head list
+        next    = head (tail list)
+
+
+
