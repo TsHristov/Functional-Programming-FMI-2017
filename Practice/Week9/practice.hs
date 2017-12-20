@@ -26,10 +26,11 @@ pack :: (Eq a) => [a] -> [[a]]
 pack  [] = []
 pack [x] = [[x]]
 pack list
-  | current == next = [current] : pack (tail list)
-  | otherwise       = [[current]] ++ pack (tail list)
+  | current == next = (current:(head rest)) : (tail rest)
+  | otherwise       = [current] : rest
   where current = head list
         next    = head (tail list)
+        rest    = pack (tail list)
 
 
 
