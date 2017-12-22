@@ -42,3 +42,15 @@ takeWhile' :: (a -> Bool) -> [a] -> [a]
 takeWhile' p (x:xs)
   | p x       = x : takeWhile' p xs
   | otherwise = []
+
+-- 13. elem':
+elem' :: (Eq a) => a -> [a] -> Bool
+elem'   _ [] = False
+elem' x list = x == (head list) || elem' x (tail list)
+
+-- 14. zip':
+zip' :: [a] -> [b] -> [(a,b)]
+zip' [] _ = []
+zip' _ [] = []
+zip' list1 list2 = ((head list1), (head list2)) : zip' (tail list1) (tail list2)
+
