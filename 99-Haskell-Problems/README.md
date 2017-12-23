@@ -13,3 +13,5 @@
   * `Pack consecutive duplicates of list elements into sublists`: (09-10.hs)
   * `Run-length encoding of a list`: (09-10.hs)
   * `Drop every N'th element from a list`: (16.hs)
+  * `Remove the K'th element from a list`: (20.hs)
+  * `Insert an element at a given position into a list`: (21.hs)
