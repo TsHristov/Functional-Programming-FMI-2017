@@ -54,3 +54,22 @@ zip' [] _ = []
 zip' _ [] = []
 zip' list1 list2 = ((head list1), (head list2)) : zip' (tail list1) (tail list2)
 
+-- 15. makeSet:
+-- Example: makeSet [1,1,2,3,3,3,4,2,2,2,1,1] -> [1,2,3,4]
+makeSet :: (Eq a) => [a] -> [a]
+makeSet   [] = []
+makeSet list = toSet list []
+  where toSet (x:xs) set
+          | null xs      = set
+          | x `elem` set = toSet xs set
+          | otherwise    = toSet xs (set ++ [x])
+
+-- 16. histogram:
+-- Example: histogram [1,1,2,3,3,3,4,2,2,2,1,1] -> [(1,4),(2,4),(3,3),(4,1)]
+histogram :: (Eq a) => [a] -> [(a,Int)]
+histogram list = makeSet [ (x,n) | x <- list, let n = sum (map (\x -> 1) (filter (\y -> y == x) list)) ]
+
+
+
+
+
