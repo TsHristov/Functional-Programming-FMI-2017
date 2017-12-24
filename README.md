@@ -1,3 +1,7 @@
 # Functional-Programming
 
-Contains code I wrote during the course 'Functional Programming' held in 2017/2018 at FMI.
+> “Programs must be written for people to read, and only incidentally for machines to execute.”
+
+## About Functional Programming:
+  - A change in perspective: :heavy_check_mark:
+  - Coding satisfaction: :heavy_check_mark: 
