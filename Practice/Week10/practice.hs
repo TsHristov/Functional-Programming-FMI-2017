@@ -18,3 +18,15 @@ filter' p = foldr (\x acc -> if p x then x : acc else acc) []
 filter'' :: (a -> Bool) -> [a] -> [a]
 filter'' p = foldl (\acc x -> if p x then acc ++ [x] else acc) []
 
+-- 5. shift:
+-- Example: shift "abc" -> "bca"
+--          shift [1,2,3,4] -> [2,3,4,1]
+shift :: [a] -> [a]
+shift (x:xs) = foldr (\y acc -> y:acc) [x] xs
+
+-- 6. rotate:
+-- Example: rotate [1, 2, 3] => [[1, 2, 3], [2, 3, 1], [3, 1, 2]]
+rotate :: [a] -> [[a]]
+rotate list = foldl (\acc _ -> if null acc then list:acc else acc ++ [shift . last $ acc]) [] list
+
+
