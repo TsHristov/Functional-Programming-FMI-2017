@@ -64,12 +64,35 @@ makeSet list = toSet list []
           | x `elem` set = toSet xs set
           | otherwise    = toSet xs (set ++ [x])
 
+-- makeSet via fold:
+makeSet' :: (Eq a) => [a] -> [a]
+makeSet' = foldl (\acc x -> if elem x acc then acc else acc ++ [x]) []
+
 -- 16. histogram:
 -- Example: histogram [1,1,2,3,3,3,4,2,2,2,1,1] -> [(1,4),(2,4),(3,3),(4,1)]
 histogram :: (Eq a) => [a] -> [(a,Int)]
 histogram list = makeSet [ (x,n) | x <- list, let n = sum (map (\x -> 1) (filter (\y -> y == x) list)) ]
 
+-- 17. append:
+-- Example: append [1,2] [3,4,5] -> [1,2,3,4,5]
+append :: [a] -> [a] -> [a]
+append  x [] = x
+append  [] x = x
+append (x:xs) ys = x : append xs ys
 
+-- 18. concat:
+-- Example: concat [[3,4,5], [2,3,4], [2,1,1]]
+concat' :: [[a]] -> [a]
+concat' list = foldl (\acc x -> (append acc x)) [] list
 
+-- 19. difference:
+-- Example: [1..10] `difference` [2,5,9] -> [1,3,4,6,7,8,10]
+difference  l1 l2 = filter (\x -> not (elem x l2)) l1
+difference' l1 l2 = [ x | x <- l1, not (elem x l2) ]
+
+-- 20. intersect:
+-- Example: [1..7] `intersect` [5..10] -> [5,6,7]
+intersect  l1 l2 = filter (\x -> x `elem` l2) l1
+intersect' l1 l2 = [ x | x <- l1, x `elem` l2 ]
 
 

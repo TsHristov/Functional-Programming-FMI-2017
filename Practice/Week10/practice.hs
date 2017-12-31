@@ -31,7 +31,6 @@ shift (x:xs) = foldr (\y acc -> y:acc) [x] xs
 rotate :: [a] -> [[a]]
 rotate list = foldl (\acc _ -> if null acc then list:acc else acc ++ [shift . last $ acc]) [] list
 
-
 -- 7. split:
 -- Example: split even [1, 3, 4, 5, 7, 9, 8, 8, 55] => [[1, 3], [5, 7, 9], [55]]
 split :: (a -> Bool) -> [a] -> [[a]]
@@ -40,6 +39,15 @@ split p list =  let groupByOpposite   = List.groupBy (\x y -> (not $ p x) && (no
                 in  leaveOnlyOpposite $ groupByOpposite list
                     
 -- 8. inits:
--- Example: inits "ate" -> [["", "a", "at", "ate"]
+-- Example: inits "ate" -> ["", "a", "at", "ate"]
 inits' :: [a] -> [[a]]
 inits' = scanl (\acc x -> acc ++ [x]) []
+
+
+-- 9. removeDuplicates:
+-- Example: removeDuplicates [1,2,2,3,3,3,1,1] -> [1,2,3,1]
+removeDuplicates :: (Eq a) => [a] -> [a]
+removeDuplicates = foldr (\x acc -> if not (null acc) && x == head acc then acc else x:acc) []
+
+removeDuplicates' :: (Eq a) => [a] -> [a]
+removeDuplicates' = foldl (\acc x -> if not (null acc) && x == last acc then acc else acc ++ [x]) []
