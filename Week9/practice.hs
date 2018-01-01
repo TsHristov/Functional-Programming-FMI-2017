@@ -87,12 +87,48 @@ concat' list = foldl (\acc x -> (append acc x)) [] list
 
 -- 19. difference:
 -- Example: [1..10] `difference` [2,5,9] -> [1,3,4,6,7,8,10]
+difference :: (Eq a) => [a] -> [a] -> [a]
 difference  l1 l2 = filter (\x -> not (elem x l2)) l1
 difference' l1 l2 = [ x | x <- l1, not (elem x l2) ]
 
 -- 20. intersect:
 -- Example: [1..7] `intersect` [5..10] -> [5,6,7]
+intersect :: (Eq a) => [a] -> [a] -> [a]
 intersect  l1 l2 = filter (\x -> x `elem` l2) l1
+
+intersect' :: (Eq a) => [a] -> [a] -> [a]
 intersect' l1 l2 = [ x | x <- l1, x `elem` l2 ]
 
+-- 21. partition:
+-- Example: partition (`elem` ['A'..'Z']) "BOBsidneyMORGANeddy" -> ("BOBMORGAN", "sidneyeddy")
+partition :: (a -> Bool) -> [a] -> ([a],[a])
+partition p list = (filter p list, filter (not . p) list)
 
+-- 22. span:
+-- Example: span (/=4) [1,2,3,4,5,6,7] -> ([1,2,3], [4,5,6])
+span' :: (a -> Bool) -> [a] -> ([a],[a])
+span' p xs = (takeWhile p xs, dropWhile p xs)
+
+-- 23. tails:
+-- Example: tails "abcd" -> ["abcd","bcd","cd","d",""]
+tails' :: [a] -> [[a]]
+tails' = scanr (\x acc -> x:acc) []
+
+-- 24. isPrefixOf:
+-- Example: "one" `isPrefixOf` "one two" -> True
+isPrefixOf' :: (Eq a) => [a] -> [a] -> Bool
+isPrefixOf' [] _ = True
+isPrefixOf' _ [] = False
+isPrefixOf' needle haystack = (take (length needle) haystack) == needle
+
+-- 25. isInfixOf:
+-- Example:  "one" `isInfixOf` "twothreeonefour" -> True
+isInfixOf' :: (Eq a) => [a] -> [a] -> Bool
+isInfixOf' needle haystack  = any (isPrefixOf' needle) (tails' haystack)
+
+-- 26. isSuffixOf:
+-- Example: "one" `isSuffixOf` "twothreeone" -> True
+isSuffixOf' :: (Eq a) => [a] -> [a] -> Bool
+isSuffixOf' needle haystack = needle == suffix
+  where rest   = length haystack - length needle
+        suffix = drop rest haystack
