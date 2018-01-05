@@ -1,3 +1,5 @@
+import Data.List as List (sortBy)
+
 -- 1. sumProducts:
 -- Example: sumProducts [[1,2,3], [4,5], [], [-2,3,0,5,1]] -> 27
 sumProducts :: [[Int]] -> Int
@@ -46,3 +48,24 @@ setIntersect xs ys = [ x | x <- xs, x `elem` ys ]
 -- Example: setDiff [1,2,3,5] [2,4,5,6,7] -> [1,3]
 setDiff :: Eq a => [a] -> [a] -> [a]
 setDiff xs ys = [ x | x <- xs, not $ x `elem` ys ]
+
+-- 9. sortByMostCommon: Sorts a list of list according to the most common element in each:
+-- Example: sortByMostCommon ["moo", "bee", "eve", "abracadabra", "abcdefg", "mama", "z"]
+--          -> ["abracadabra", "bee", "eve", "abcdefg", "mama", "moo", "z"]
+mostCommonElement :: (Ord a) => [a] -> a
+mostCommonElement list  = biggest mostCommon
+  where elementsCounts  = map (\x -> (x, count x list)) list
+        mostCommonCount = maximum $ map snd elementsCounts
+        mostCommon      = filter (\(a,b) -> b == mostCommonCount) elementsCounts
+        biggest         = maximum . map fst
+
+sortBySnd :: Ord a => (c, a) -> (b, a) -> Ordering
+sortBySnd (x1, x2) (y1, y2)
+  | x2 < y2   = LT
+  | x2 > y2   = GT
+  | otherwise = EQ
+
+sortByMostCommon :: (Ord a) => [[a]] -> [[a]]
+sortByMostCommon    = map fst . List.sortBy (sortBySnd) . mostCommons
+  where mostCommons = map (\x -> (x, mostCommonElement x))
+
