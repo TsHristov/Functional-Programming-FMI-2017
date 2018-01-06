@@ -27,3 +27,29 @@ postorder binaryTree  = traverseLeft ++ traverseRight ++ rootValue
         rootValue     = [root $ binaryTree]
         traverseRight = postorder (right $ binaryTree)
         
+--  All nodes at a given level:
+allNodesAtLevel :: BinaryTree a -> Int -> [a]
+allNodesAtLevel EmptyTree _ = []
+allNodesAtLevel binaryTree 0 = [root $ binaryTree]
+allNodesAtLevel binaryTree level = allNodesInLeft ++ allNodesInRight
+  where allNodesInLeft  =  allNodesAtLevel (left $ binaryTree) (level-1)
+        allNodesInRight =  allNodesAtLevel (right $ binaryTree) (level-1)
+
+-- Maps a function over the binary tree:
+mapTree :: (a -> a) -> BinaryTree a -> BinaryTree a
+mapTree _ EmptyTree = EmptyTree
+mapTree function binaryTree = Node mapRoot mapLeft mapRight
+  where mapRoot  = function $ root $ binaryTree
+        mapLeft  = mapTree function (left $ binaryTree)
+        mapRight = mapTree function (right $ binaryTree)
+
+-- Check if a path in the tree exists:
+pathExists :: (Eq a) => BinaryTree a -> [a] -> Bool
+pathExists   EmptyTree [] = True
+pathExists           _ [] = False
+pathExists EmptyTree path = False
+pathExists (Node root left right) (x:xs)
+  | x == root = pathExists left xs || pathExists right xs
+  | x /= root = False
+
+
