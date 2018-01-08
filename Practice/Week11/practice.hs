@@ -1,11 +1,20 @@
 data BinaryTree a =
   EmptyTree | Node { root :: a, left :: (BinaryTree a), right :: (BinaryTree a) } deriving (Show, Read, Eq)
 
+makeTree :: (Eq a) => a -> a -> a -> BinaryTree a
+makeTree root left right = (Node root (Node left EmptyTree EmptyTree)
+                                      (Node right EmptyTree EmptyTree))
+
 emptyTree :: BinaryTree a -> Bool
 emptyTree EmptyTree = True
 emptyTree         _ = False
 
-testTree = Node 1 (Node 2 (Node 4 EmptyTree EmptyTree) (Node 5 EmptyTree EmptyTree)) (Node 3 EmptyTree EmptyTree)
+makeLeaf :: (Eq a) => a -> BinaryTree a
+makeLeaf root = (Node root EmptyTree EmptyTree)
+
+leaf :: BinaryTree a -> Bool
+leaf (Node root EmptyTree EmptyTree) = True
+leaf _ = False
 
 inorder :: BinaryTree a -> [a]
 inorder EmptyTree = []
@@ -77,3 +86,26 @@ bstConstruct  list = Node (list !! middle) (bstConstruct firstHalf) (bstConstruc
   where middle     = length list `div` 2
         firstHalf  = take middle list
         secondHalf = drop (middle + 1) list
+
+bloom :: (Eq a) => BinaryTree a -> BinaryTree a
+bloom EmptyTree = EmptyTree
+bloom tree@(Node root left right)
+  | leaf tree = makeTree root root root
+  | otherwise = Node root (bloom left) (bloom right)
+
+-- Removes all leaves in a Binary Tree:
+prune :: Eq a => BinaryTree a -> BinaryTree a
+prune EmptyTree = EmptyTree
+prune tree@(Node root left right)
+  | leaf tree = EmptyTree
+  | otherwise = Node root (prune left) (prune right)
+
+-- Make BinaryTree instance of typeclass Foldable so we can fold over it:
+instance Foldable BinaryTree where
+  foldr f z EmptyTree = z
+  foldr f z (Node root left right) = foldr f (f root (foldr f z right)) left
+
+-- Checks if a Binary Tree is a valid Binary Search Tree:
+validBST :: (Eq a, Ord a) => BinaryTree a -> Bool
+validBST EmptyTree = True
+validBST (Node root left right) = all (<=root) left && all (>root) right
