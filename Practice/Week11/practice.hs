@@ -12,9 +12,9 @@ emptyTree         _ = False
 makeLeaf :: (Eq a) => a -> BinaryTree a
 makeLeaf root = (Node root EmptyTree EmptyTree)
 
-leaf :: BinaryTree a -> Bool
-leaf (Node root EmptyTree EmptyTree) = True
-leaf _ = False
+isLeaf :: BinaryTree a -> Bool
+isLeaf (Node root EmptyTree EmptyTree) = True
+isLeaf _ = False
 
 inorder :: BinaryTree a -> [a]
 inorder EmptyTree = []
@@ -39,7 +39,7 @@ postorder binaryTree  = traverseLeft ++ traverseRight ++ rootValue
   where traverseLeft  = postorder (left $ binaryTree)
         rootValue     = [root $ binaryTree]
         traverseRight = postorder (right $ binaryTree)
-        
+
 --  All nodes at a given level:
 allNodesAtLevel :: BinaryTree a -> Int -> [a]
 allNodesAtLevel EmptyTree _ = []
@@ -53,7 +53,7 @@ instance Functor BinaryTree where
   fmap f EmptyTree = EmptyTree
   fmap f (Node root left right) = Node (f root) (fmap f left) (fmap f right)
   
--- Maps a function over the binary tree:
+-- Maps a function over a binary tree:
 mapTree :: (a -> b) -> BinaryTree a -> BinaryTree b
 mapTree _ EmptyTree = EmptyTree
 mapTree function binaryTree = fmap function binaryTree
@@ -90,14 +90,14 @@ bstConstruct  list = Node (list !! middle) (bstConstruct firstHalf) (bstConstruc
 bloom :: (Eq a) => BinaryTree a -> BinaryTree a
 bloom EmptyTree = EmptyTree
 bloom tree@(Node root left right)
-  | leaf tree = makeTree root root root
+  | isLeaf tree = makeTree root root root
   | otherwise = Node root (bloom left) (bloom right)
 
 -- Removes all leaves in a Binary Tree:
 prune :: Eq a => BinaryTree a -> BinaryTree a
 prune EmptyTree = EmptyTree
 prune tree@(Node root left right)
-  | leaf tree = EmptyTree
+  | isLeaf tree = EmptyTree
   | otherwise = Node root (prune left) (prune right)
 
 -- Make BinaryTree instance of typeclass Foldable so we can fold over it:
@@ -108,4 +108,33 @@ instance Foldable BinaryTree where
 -- Checks if a Binary Tree is a valid Binary Search Tree:
 validBST :: (Eq a, Ord a) => BinaryTree a -> Bool
 validBST EmptyTree = True
-validBST (Node root left right) = all (<=root) left && all (>root) right
+validBST (Node root left right) = all (<root) left && all (>root) right
+
+-- Find the count of nodes of a tree:
+treeElementsCount :: BinaryTree a -> Int
+treeElementsCount = sum . fmap (\x -> 1)
+
+-- Check if an element exists in the tree:
+treeFind :: (Eq a) => a -> BinaryTree a -> Bool
+treeFind = elem
+
+-- Count the leaves of a tree:
+countLeaves :: BinaryTree a -> Int
+countLeaves EmptyTree = 0
+countLeaves tree
+  | isLeaf tree = 1
+  | otherwise   = countLeaves (left tree) + countLeaves (right tree)
+
+-- Find the height of a tree:
+treeHeight :: BinaryTree a -> Int
+treeHeight EmptyTree = 0
+treeHeight tree
+  | isLeaf tree = 0
+  | otherwise   = max (1 + treeHeight (left tree))
+                      (1 + treeHeight (right tree))
+
+  
+
+
+
+
