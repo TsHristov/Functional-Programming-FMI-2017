@@ -16,29 +16,27 @@ isLeaf :: BinaryTree a -> Bool
 isLeaf (Node root EmptyTree EmptyTree) = True
 isLeaf _ = False
 
-inorder :: BinaryTree a -> [a]
-inorder EmptyTree = []
-inorder (Node root EmptyTree EmptyTree) = [root]
-inorder binaryTree    = traverseLeft ++ rootValue ++ traverseRight
-  where traverseLeft  = inorder (left $ binaryTree)
+data Order = Inorder | Preorder | Postorder deriving (Eq)
+
+traverse :: Order -> BinaryTree a -> [a]
+traverse _ EmptyTree = []
+traverse _ (Node root EmptyTree EmptyTree) = [root]
+traverse order binaryTree
+  | order == Inorder  = traverseLeft ++  rootValue    ++ traverseRight
+  | order == Preorder = rootValue    ++ traverseLeft  ++ traverseRight
+  | otherwise         = traverseLeft ++ traverseRight ++ rootValue
+  where traverseLeft  = traverse order (left $ binaryTree)
         rootValue     = [root $ binaryTree]
-        traverseRight = inorder (right $ binaryTree)
+        traverseRight = traverse order (right $ binaryTree)
+
+inorder :: BinaryTree a -> [a]
+inorder  = traverse Inorder
 
 preorder :: BinaryTree a -> [a]
-preorder EmptyTree = []
-preorder (Node root EmptyTree EmptyTree) = [root]
-preorder binaryTree   =  rootValue ++ traverseLeft ++ traverseRight
-  where traverseLeft  = preorder (left $ binaryTree)
-        rootValue     = [root $ binaryTree]
-        traverseRight = preorder (right $ binaryTree)
+preorder = traverse Preorder
 
 postorder :: BinaryTree a -> [a]
-postorder EmptyTree = []
-postorder (Node root EmptyTree EmptyTree) = [root]
-postorder binaryTree  = traverseLeft ++ traverseRight ++ rootValue
-  where traverseLeft  = postorder (left $ binaryTree)
-        rootValue     = [root $ binaryTree]
-        traverseRight = postorder (right $ binaryTree)
+postorder = traverse Postorder
 
 --  All nodes at a given level:
 allNodesAtLevel :: BinaryTree a -> Int -> [a]
@@ -105,20 +103,20 @@ instance Foldable BinaryTree where
   foldr f z EmptyTree = z
   foldr f z (Node root left right) = foldr f (f root (foldr f z right)) left
 
--- Checks if a Binary Tree is a valid Binary Search Tree:
+-- Check if a Binary Tree is a valid Binary Search Tree:
 validBST :: (Eq a, Ord a) => BinaryTree a -> Bool
 validBST EmptyTree = True
 validBST (Node root left right) = all (<root) left && all (>root) right
 
--- Find the count of nodes of a tree:
+-- Find the count of nodes of a Binary Tree:
 treeElementsCount :: BinaryTree a -> Int
 treeElementsCount = sum . fmap (\x -> 1)
 
--- Check if an element exists in the tree:
+-- Check if an element exists in a Binary Tree:
 treeFind :: (Eq a) => a -> BinaryTree a -> Bool
 treeFind = elem
 
--- Count the leaves of a tree:
+-- Count the leaves of a Binary Tree:
 countLeaves :: BinaryTree a -> Int
 countLeaves EmptyTree = 0
 countLeaves tree
@@ -132,9 +130,4 @@ treeHeight tree
   | isLeaf tree = 0
   | otherwise   = max (1 + treeHeight (left tree))
                       (1 + treeHeight (right tree))
-
-  
-
-
-
 
