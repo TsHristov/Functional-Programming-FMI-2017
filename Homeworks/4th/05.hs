@@ -17,13 +17,10 @@ minDistance (_, x2) (_, y2)
   | x2 > y2   = GT
   | otherwise = EQ
 
--- minRoute: Extract the minimum distance from (Path, Distance) pair
-minRoute :: [(a,b)] -> b
-minRoute = snd . head
-
 -- minPath: Traveling Salesman Problem (Naive Solution)
 minPath :: (Float, Float) -> [(Float,Float)] -> Float
-minPath home places  = minRoute minRoutes
-  where paths        = map (\place -> [home] ++ place ++ [home]) (permutations places)
+minPath start places = minRoute minRoutes
+  where paths        = map (\place -> [start] ++ place ++ [start]) (permutations places)
         distances    = map (\x -> (x, totalDistance x)) paths
         minRoutes    = sortBy minDistance distances
+        minRoute     = snd . head
