@@ -42,14 +42,14 @@ rectangle (x, _) = x
 
 takeLargestArea :: Rectangle -> Rectangle -> Rectangle
 takeLargestArea a b
-  | rectangleArea a > rectangleArea b = a
-  | otherwise                         = b
+  | rectangleArea a < rectangleArea b = b
+  | otherwise                         = a
 
 rectangleOverlapsCounts :: [Rectangle] -> [(Rectangle, OverlapsCount)]
 rectangleOverlapsCounts rectangles = map (\rectangle -> (rectangle, overlapsCount rectangle)) rectangles
-  where  overlapsCount rect     = sum $ rectangleOverlaps rect
-         restRectangles rect    = filter (/=rect) rectangles
-         rectangleOverlaps rect = map (\x -> if (overlap rect x) then 1 else 0) (restRectangles rect)
+  where  overlapsCount rect        = sum $ rectangleOverlaps rect
+         restRectangles rect       = filter (/=rect) rectangles
+         rectangleOverlaps rect    = map (\x -> if (overlap rect x) then 1 else 0) (restRectangles rect)
 
 mostPopular :: [Rectangle] -> Rectangle
 mostPopular rectangles = chooseMostPopular
