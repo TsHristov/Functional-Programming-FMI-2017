@@ -1,6 +1,6 @@
--- Task 2:
--- Transform a Binary Tree into new Binary Tree where the value of each root
--- is tuple of the smallest interval contatining all values in the tree:
+-- | Task 2:
+-- | Transform a Binary Tree into new Binary Tree where the value of each root
+-- | is tuple of the smallest interval contatining all values in the tree:
 
 data BinaryTree a = EmptyTree | Node { root  :: a,
                                        left  :: (BinaryTree a),
